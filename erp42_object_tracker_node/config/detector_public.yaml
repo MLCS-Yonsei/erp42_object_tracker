@@ -1,0 +1,28 @@
+detect: {
+  frame_id: "velodyne",
+  sub_pc_topic: "/velodyne_points",
+  sub_pc_queue_size: 1,
+
+  pub_pcs_array_segmented_topic: "/segment/clouds_array_segmented",
+  pub_pcs_segmented_topic: "/segment/clouds_segmented",
+
+  ## Ground Segmenter
+  # default: "GroundPlaneFittingSegmenter"
+  ground_remover_type: "GroundPlaneFittingSegmenter",
+  #ground_remover_type: "GroundRANSACSegmenter",
+
+  ## Segment non-ground point cloud, otherwise, only Ground Segmenter
+  # default: false
+  use_non_ground_segmenter: true,
+  #use_non_ground_segmenter: false,
+
+  ## non-ground segmenter type
+  # default: "RegionEuclideanSegmenter"
+  non_ground_segmenter_type: "RegionEuclideanSegmenter",
+  #non_ground_segmenter_type: "EuclideanSegmenter",
+
+  ## Object Builder
+  # default: false
+  is_object_builder_open: true,
+  pub_objects_segmented_topic: "/segmenter/objects_segmented",
+}
