@@ -1,0 +1,18 @@
+[submodule "common_lib"]
+	path = common_lib
+	url = https://github.com/sjnah/common_lib.git
+[submodule "roi_filters"]
+	path = roi_filters
+	url = https://github.com/sjnah/roi_filters_lib.git
+[submodule "object_builders_lib"]
+	path = object_builders_lib
+	url = https://github.com/LidarPerception/object_builders_lib.git
+[submodule "segmenters_lib"]
+	path = segmenters_lib
+	url = https://github.com/sjnah/segmenters_lib.git
+[submodule "feature_extractors_lib"]
+	path = feature_extractors_lib
+	url = https://github.com/LidarPerception/feature_extractors_lib.git
+[submodule "tracking_lib"]
+	path = tracking_lib
+	url = https://github.com/sjnah/tracking_lib.git
