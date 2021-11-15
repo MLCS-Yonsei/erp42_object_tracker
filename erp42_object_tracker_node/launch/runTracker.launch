@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <launch>
+    <arg name="bag_file" default="/home/sjnah/ros_ws/rosbag/ai_racing/simultaneous_drive_only_lidar_ver2.bag" />
 
     <!-- Launch detection_node -->
     <node pkg="erp42_object_tracker_node" type="erp42_object_tracker_node_detection" name="detection_node" output="screen">
@@ -8,12 +9,12 @@
     </node>
 
     <!-- Launch tracking_node -->
-    <node pkg="erp42_object_tracker_node" type="erp42_object_tracker_node_tracking" name="tracking_node" output="screen">
+    <!-- <node pkg="erp42_object_tracker_node" type="erp42_object_tracker_node_tracking" name="tracking_node" output="screen">
         <rosparam command="load" file="$(find erp42_object_tracker_node)/config/tracker_public.yaml"/>
         <rosparam command="load" file="$(find erp42_object_tracker_node)/config/tracker_private.yaml"/>
-    </node>
+    </node> -->
 
     <!-- Launch rviz for visualization -->
-    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find erp42_object_tracker_node)/rviz/detection_node.rviz"/> -->
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find erp42_object_tracker_node)/rviz/detection_node.rviz"/>
+    <!-- <node pkg="rosbag" type="play" name="player" output="screen" args="clock $(arg bag_file)"/> -->
 </launch>

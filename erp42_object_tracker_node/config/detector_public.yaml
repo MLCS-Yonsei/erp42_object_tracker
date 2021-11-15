@@ -12,17 +12,11 @@ detect: {
   #ground_remover_type: "GroundRANSACSegmenter",
 
   ## Segment non-ground point cloud, otherwise, only Ground Segmenter
-  # default: false
+  # default: true
   use_non_ground_segmenter: true,
-  #use_non_ground_segmenter: false,
 
   ## non-ground segmenter type
   # default: "RegionEuclideanSegmenter"
   non_ground_segmenter_type: "RegionEuclideanSegmenter",
   #non_ground_segmenter_type: "EuclideanSegmenter",
-
-  ## Object Builder
-  # default: false
-  is_object_builder_open: true,
-  pub_objects_segmented_topic: "/segmenter/objects_segmented",
 }

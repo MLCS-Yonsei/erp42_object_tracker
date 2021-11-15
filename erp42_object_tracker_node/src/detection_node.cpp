@@ -121,16 +121,22 @@ void ObjectDetector::pointcloudCallback(const sensor_msgs::PointCloud2ConstPtr& 
     segmenter_->segment(*cloud_nonground, cloud_clusters);
 
     //---------------------------------- temp debugging -------------------------------------------------
+    ROS_WARN_STREAM("Cluster_size: "); // for debug. will be removed
+    float MAX_OBJECT_LENGTH = 2.57; // 차 대각길이 (2.57)
+
     std::vector<autosense::PointICloudPtr>::iterator it_cluster = cloud_clusters.begin();
     for (it_cluster=cloud_clusters.begin(); it_cluster<cloud_clusters.end(); it_cluster++)
     {
         int cluster_idx = std::distance(cloud_clusters.begin(), it_cluster);
         int each_cluster_size = cloud_clusters[cluster_idx]->points.size();
-        std::cout<<each_cluster_size;
+        
 
-        float length_max = 0.0;
+        float cluster_size_max = 0.0;
+        float z_min = 0.0; // for debug. will be removed
         for (size_t idx_1 = 0u; idx_1 < cloud_clusters[cluster_idx]->points.size(); ++idx_1) 
         {
+            float z = cloud_clusters[cluster_idx]->points[idx_1].z; // for debug. will be removed
+
             for (size_t idx_2 = 0u; idx_2 < cloud_clusters[cluster_idx]->points.size(); ++idx_2) 
             {
                 float x_1 = cloud_clusters[cluster_idx]->points[idx_1].x;
@@ -139,19 +145,27 @@ void ObjectDetector::pointcloudCallback(const sensor_msgs::PointCloud2ConstPtr& 
                 float y_2 = cloud_clusters[cluster_idx]->points[idx_2].y;
                 float dist = sqrt(pow((x_1-x_2),2) + pow((y_1-y_2),2));
 
-                if (dist > length_max)
+                if (dist > cluster_size_max)
                 {
-                    length_max = dist;
+                    cluster_size_max = dist;
                 }
+            }
+
+            if (z < z_min) // for debug. will be removed
+            {
+                z_min = z;
             }
         }
 
-        if (length_max > 2.2)
+        ROS_WARN_STREAM(each_cluster_size << ", (" << z_min << ")"); // for debug. will be removed
+
+        if (cluster_size_max > MAX_OBJECT_LENGTH)
         {
             cloud_clusters.erase(it_cluster);
-            it_cluster--;
+            --it_cluster;
         }
     }
+    ROS_WARN_STREAM("\n"); // for debug. will be removed
     //-------------------------------------------------------------------------------------------
 
     autosense::common::publishPointCloudArray<autosense::PointICloudPtr>(pcs_array_segmented_pub_, header, cloud_clusters);
