@@ -37,17 +37,6 @@ int main(int argc, char **argv)
     ROS_INFO("detection_node exited...");
 }
 
-ObjectDetector::ObjectDetector()
-{
-    ;
-}
-
-ObjectDetector::~ObjectDetector()
-{
-    // delete ros parames
-    ;
-}
-
 void ObjectDetector::spinNode()
 {
     spiner.start();
@@ -73,6 +62,7 @@ bool ObjectDetector::updateParams()
     std::string ground_remover_type, non_ground_segmenter_type;
     private_nh.param<std::string>(param_ns_prefix_ + "/ground_remover_type", ground_remover_type, "GroundPlaneFittingSegmenter");
     private_nh.param<std::string>(param_ns_prefix_ + "/non_ground_segmenter_type", non_ground_segmenter_type, "RegionEuclideanSegmenter");
+    private_nh.getParam(param_ns_prefix_ + "/Segmenter/rec_max_length", rec_max_length);
 
     autosense::SegmenterParams param = autosense::common::getSegmenterParams(private_nh, param_ns_prefix_);
     param.segmenter_type = ground_remover_type;
@@ -90,17 +80,17 @@ bool ObjectDetector::updateParams()
 
 void ObjectDetector::pointcloudCallback(const sensor_msgs::PointCloud2ConstPtr& ros_pc2)
 {
+    // save Header 
+    std_msgs::Header header = ros_pc2->header;
+    header.frame_id = frame_id_;
+    header.stamp = ros::Time::now();
+
     autosense::common::Clock clock;
 
     // Convert sensor_msgs::PointCloud to autosense::PointICloudPtr
     autosense::PointICloudPtr cloud(new autosense::PointICloud);
     pcl::fromROSMsg(*ros_pc2, *cloud);
 
-    std_msgs::Header header = ros_pc2->header;
-    header.frame_id = frame_id_;
-    header.stamp = ros::Time::now();
-
-    /// @brief ROI Filter / Ground Remover / Cluster
     // ROI Filter
     autosense::roi::approxVoxelGridFilter<autosense::PointI>(params_roi_.voxel_size, params_roi_.min_point_per_voxel, cloud);
     autosense::roi::applyROIFilter<autosense::PointI>(params_roi_, cloud);
@@ -119,24 +109,28 @@ void ObjectDetector::pointcloudCallback(const sensor_msgs::PointCloud2ConstPtr& 
 
     // Segmenter
     segmenter_->segment(*cloud_nonground, cloud_clusters);
+    applySizeFilter(cloud_clusters);
 
-    //---------------------------------- temp debugging -------------------------------------------------
-    ROS_WARN_STREAM("Cluster_size: "); // for debug. will be removed
-    float MAX_OBJECT_LENGTH = 2.57; // 차 대각길이 (2.57)
+    autosense::common::publishPointCloudArray<autosense::PointICloudPtr>(pcs_array_segmented_pub_, header, cloud_clusters);
+    autosense::common::publishClustersCloud<autosense::PointI>(pcs_segmented_pub_, header, cloud_clusters);
 
+    ROS_INFO_STREAM("Cloud processed. Took " << clock.takeRealTime() << "ms.\n");
+}
+
+void ObjectDetector::applySizeFilter(std::vector<autosense::PointICloudPtr> &cloud_clusters) 
+{
+    float MAX_OBJECT_LENGTH = rec_max_length; // Max Object Length (m)
+
+    // remove clusters larger than rec_max_length param
     std::vector<autosense::PointICloudPtr>::iterator it_cluster = cloud_clusters.begin();
     for (it_cluster=cloud_clusters.begin(); it_cluster<cloud_clusters.end(); it_cluster++)
     {
         int cluster_idx = std::distance(cloud_clusters.begin(), it_cluster);
         int each_cluster_size = cloud_clusters[cluster_idx]->points.size();
         
-
         float cluster_size_max = 0.0;
-        float z_min = 0.0; // for debug. will be removed
         for (size_t idx_1 = 0u; idx_1 < cloud_clusters[cluster_idx]->points.size(); ++idx_1) 
         {
-            float z = cloud_clusters[cluster_idx]->points[idx_1].z; // for debug. will be removed
-
             for (size_t idx_2 = 0u; idx_2 < cloud_clusters[cluster_idx]->points.size(); ++idx_2) 
             {
                 float x_1 = cloud_clusters[cluster_idx]->points[idx_1].x;
@@ -150,14 +144,7 @@ void ObjectDetector::pointcloudCallback(const sensor_msgs::PointCloud2ConstPtr& 
                     cluster_size_max = dist;
                 }
             }
-
-            if (z < z_min) // for debug. will be removed
-            {
-                z_min = z;
-            }
         }
-
-        ROS_WARN_STREAM(each_cluster_size << ", (" << z_min << ")"); // for debug. will be removed
 
         if (cluster_size_max > MAX_OBJECT_LENGTH)
         {
@@ -165,11 +152,4 @@ void ObjectDetector::pointcloudCallback(const sensor_msgs::PointCloud2ConstPtr& 
             --it_cluster;
         }
     }
-    ROS_WARN_STREAM("\n"); // for debug. will be removed
-    //-------------------------------------------------------------------------------------------
-
-    autosense::common::publishPointCloudArray<autosense::PointICloudPtr>(pcs_array_segmented_pub_, header, cloud_clusters);
-    autosense::common::publishClustersCloud<autosense::PointI>(pcs_segmented_pub_, header, cloud_clusters);
-
-    ROS_INFO_STREAM("Cloud processed. Took " << clock.takeRealTime() << "ms.\n");
 }

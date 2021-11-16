@@ -83,6 +83,7 @@ detect: {
         # type: int
         rec_min_cluster_size: 5, # 10
         rec_max_cluster_size: 800, # 400
+        rec_max_length: 2.57, 
         
         ## Clusters merged between regions
         # type: bool

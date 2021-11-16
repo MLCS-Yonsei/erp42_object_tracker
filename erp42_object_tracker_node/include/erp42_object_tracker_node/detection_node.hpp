@@ -21,9 +21,9 @@ class ObjectDetector
 {
 public:
 
-    ObjectDetector();
+    ObjectDetector(){};
 
-    ~ObjectDetector();
+    ~ObjectDetector(){};
 
     bool updateParams();
 
@@ -45,6 +45,7 @@ private:
     const std::string param_ns_prefix_ = "detect";  // NOLINT
     std::string frame_id_;                          // NOLINT
     bool use_roi_filter_;
+    float rec_max_length;
     autosense::ROIParams params_roi_;
     
     /// @note Core components
@@ -52,6 +53,8 @@ private:
     boost::shared_ptr<autosense::segmenter::BaseSegmenter> segmenter_;
     
     void pointcloudCallback(const sensor_msgs::PointCloud2ConstPtr& ros_pc2);
+
+    void applySizeFilter(std::vector<autosense::PointICloudPtr> &cloud_clusters);
 
 };
 
