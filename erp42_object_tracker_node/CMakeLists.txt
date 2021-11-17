@@ -7,6 +7,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(erp42_object_tracker_node)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
+set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
@@ -67,6 +68,8 @@ add_executable(${PROJECT_NAME}_detection
 )
 add_executable(${PROJECT_NAME}_tracking
     src/tracking_node.cpp
+    src/ihgp/Matern32model.cpp 
+    src/ihgp/InfiniteHorizonGP.cpp 
 )
 
 ### Specify libraries to link a library or executable target against

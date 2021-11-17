@@ -1,9 +1,24 @@
 tracking: {
+  IHGP: {
+    frequency: 10,
+    id_threshold: 2.0, # need to fix
+    data_length: 20,
+
+    lpf_tau: 0.03,
+    logSigma2_x: -5.5,
+    logMagnSigma2_x: -3.5,
+    logLengthScale_x: 0.75,
+
+    logSigma2_y: -5.5,
+    logMagnSigma2_y: -3.5,
+    logLengthScale_y: 0.75,
+  },
+
   ##----------------- Tracking-help Segmentation
   # threshold used for judging "contains"
   # type: float
   # default: 1.0 (>0.6 means without tracking help)
-  threshold_contian_IoU: 0.01,
+  threshold_contian_IoU: 1.0,
 
   TrackingWorker: {
       ##----------------- Matcher: tracker<->observed object association
@@ -22,21 +37,21 @@ tracking: {
       filter_method_name: "robust_kalman_filter",
       filter_use_adaptive: true,
       # equals to matcher_match_distance_maximum
-      filter_association_score_maximum: 4.0,
-      filter_measurement_noise: 0.4,
-      filter_initial_velocity_noise: 5.0,
+      filter_association_score_maximum: 1.0,
+      filter_measurement_noise: 0.1,
+      filter_initial_velocity_noise: 1.0,
       # | xy_propagation_noise    0           0          |
       # |         0   xy_propagation_noise    0          |
       # |         0               0  z_propagation_noise |
-      filter_xy_propagation_noise: 10.0,
-      filter_z_propagation_noise: 10.0,
+      filter_xy_propagation_noise: 2.0,
+      filter_z_propagation_noise: 2.0,
       filter_breakdown_threshold_maximum: 10.0,
       # Basic Tracker setup
       tracker_cached_history_size_maximum: 5,
       tracker_consecutive_invisible_maximum: 1,
       tracker_visible_ratio_minimum: 0.6,
-      tracker_acceleration_noise_maximum: 5,
-      tracker_speed_noise_maximum: 0.4,
+      tracker_acceleration_noise_maximum: 1,
+      tracker_speed_noise_maximum: 0.1,
 
       ##----------------- Tracking Objects collect conditions
       # If true, histograms between tracker and observation are considered
