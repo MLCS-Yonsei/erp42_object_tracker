@@ -48,8 +48,8 @@ private:
     ros::AsyncSpinner spiner = ros::AsyncSpinner(1);
     // ROS Subscriber
     ros::Subscriber pcs_segmented_sub_;
-    // tf::TransformListener tf_listener_;
-    std::unique_ptr<tf::TransformListener> tf_listener_;
+    tf::TransformListener tf_listener_;
+    // std::unique_ptr<tf::TransformListener> tf_listener_;
     // ROS Publisher
     ros::Publisher marker_pub; // obstacle pose visualization 
     ros::Publisher pose_pub;
@@ -65,6 +65,7 @@ private:
     std::unique_ptr<autosense::object_builder::BaseObjectBuilder> object_builder_ = nullptr;
 
     //***************************************
+    int first_frame = true;
     std::vector<int> objIDs; // obj lists
     std::vector<std::vector<pcl::PointXYZI>> stack_obj; // t~(t-10) cluster Centers stack
     std::vector<std_msgs::ColorRGBA> colorset; // rviz msg colorset
@@ -74,6 +75,7 @@ private:
     int spin_counter = 0;
     std::vector<InfiniteHorizonGP*> GPs_x;
     std::vector<InfiniteHorizonGP*> GPs_y;
+    std::vector<tf::StampedTransform> ego_tf_stack;
     
     float frequency = 10; // node frequency
     float dt_gp = 1/frequency; 

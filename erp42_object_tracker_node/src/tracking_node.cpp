@@ -129,27 +129,35 @@ bool ObjectTracker::updateParams()
 
 void ObjectTracker::pointcloudCallback(const autosense_msgs::PointCloud2ArrayConstPtr &segments_msg)
 {
-
-    ROS_WARN_STREAM("000000");
-
     // get msg header data
     const double kTimeStamp = segments_msg->header.stamp.toSec();
     std_msgs::Header header;
     header.frame_id = local_frame_id_;
     header.stamp = segments_msg->header.stamp;
 
-    ROS_WARN_STREAM("1111111");
+    tf::StampedTransform transform;
+    try
+    {
+        tf_listener_.lookupTransform("/map", "/velodyne", ros::Time(0), transform);
+    }
+    catch (tf::TransformException ex)
+    {
+        ROS_ERROR("%s",ex.what());
+    }
 
-    // tf::StampedTransform transform;
-    // try
-    // {
-    //     tf_listener_.lookupTransform("/map", "/velodyne", segments_msg->header.stamp, transform);
-    // }
-    // catch (tf::TransformException ex)
-    // {
-    //     ROS_ERROR("%s",ex.what());
-    // }
-
+    if (first_frame==true)
+    {
+        for (int i = 0; i < data_length; ++i)
+        { 
+            ego_tf_stack.push_back(transform);
+        }
+        first_frame==false;
+    }
+    else
+    {
+        ego_tf_stack.erase(ego_tf_stack.begin());
+        ego_tf_stack.push_back(transform);
+    }
 
     std::vector<pcl::PointXYZI> clusterCentroids;
     std::vector<autosense::PointICloudPtr> segment_clouds;
@@ -186,8 +194,6 @@ void ObjectTracker::pointcloudCallback(const autosense_msgs::PointCloud2ArrayCon
 
         segment_clouds.push_back(cloud);
     }
-
-    ROS_WARN_STREAM("22222");
 
     //****************************************************************************
     // exit callback if no obstacles
@@ -243,13 +249,9 @@ void ObjectTracker::pointcloudCallback(const autosense_msgs::PointCloud2ArrayCon
         }            
     }
 
-    ROS_WARN_STREAM("333333");
-
     // call IHGP
     std::vector<std::vector<pcl::PointXYZI>> pos_vel_s;
     pos_vel_s = callIHGP(this_objIDs);
-
-    ROS_WARN_STREAM("4444444");
 
     // Publish TEB_Obstacle msg & rviz marker
     std::string frame_id = header.frame_id;
@@ -429,8 +431,8 @@ std::vector<std::vector<pcl::PointXYZI>> ObjectTracker::callIHGP(std::vector<int
         if (vel.y > obs_max_vy) {vel.y = obs_max_vy;}
         else if (vel.y < -obs_max_vy) {vel.y = -obs_max_vy;}
 
-        float linear_vel = std::sqrt(std::pow(vel.x,2)+std::pow(vel.y,2));
-        ROS_WARN_STREAM("Velocity:"<<linear_vel);
+        // float linear_vel = std::sqrt(std::pow(vel.x,2)+std::pow(vel.y,2));
+        // ROS_WARN_STREAM("Velocity:"<<linear_vel);
 
         pos_vel.push_back(pos);
         pos_vel.push_back(vel); // e.g. pos_vel = [pos3, vel3]
@@ -505,11 +507,19 @@ pcl::PointXYZI ObjectTracker::IHGP_fixed_vel(std::vector<pcl::PointXYZI> centroi
 
     for (int k=0; k<=gp_data_len; k++)
     {
-        double vel = (centroids[k+1].x - centroids[k].x)/dt_gp;
+        double ego_vel = ego_tf_stack[k+1].getOrigin().x() - ego_tf_stack[k].getOrigin().x();
+        double vel = (centroids[k+1].x - centroids[k].x + ego_vel)/dt_gp;
+        
+        ROS_WARN_STREAM("Velocity X: "<<ego_vel<<", "<<vel);
+
         vx_raw.push_back(vel);
         mean_x += vel;
 
-        vel = (centroids[k+1].y - centroids[k].y)/dt_gp;
+        ego_vel = ego_tf_stack[k+1].getOrigin().y() - ego_tf_stack[k].getOrigin().y();
+        vel = (centroids[k+1].y - centroids[k].y + ego_vel)/dt_gp;
+
+        ROS_WARN_STREAM("Velocity Y: "<<ego_vel<<", "<<vel);
+
         vy_raw.push_back(vel);
         mean_y += vel;
     }
