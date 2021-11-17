@@ -30,8 +30,6 @@ find_package(catkin REQUIRED COMPONENTS
     segmenters_lib
     # needed for detection_node
     roi_filters_lib
-    tracking_lib
-    feature_extractors_lib
 )
 
 
@@ -45,7 +43,7 @@ add_definitions(${PCL_DEFINITIONS})
 link_directories(${PCL_LIBRARY_DIRS})
 
 catkin_package(
-    CATKIN_DEPENDS object_builders_lib feature_extractors_lib
+    CATKIN_DEPENDS object_builders_lib
     INCLUDE_DIRS include
     LIBRARIES ${PROJECT_NAME}
 )
@@ -66,10 +64,8 @@ include_directories(
 add_executable(${PROJECT_NAME}_detection
     src/detection_node.cpp
 )
-add_executable(${PROJECT_NAME}_tracking
-    src/tracking_node.cpp
-    src/ihgp/Matern32model.cpp 
-    src/ihgp/InfiniteHorizonGP.cpp 
+add_executable(${PROJECT_NAME}_costmap
+    src/costmap_node.cpp
 )
 
 ### Specify libraries to link a library or executable target against
@@ -78,7 +74,7 @@ target_link_libraries(${PROJECT_NAME}_detection
     ${PCL_LIBRARIES}
 )
 
-target_link_libraries(${PROJECT_NAME}_tracking
+target_link_libraries(${PROJECT_NAME}_costmap
     ${catkin_LIBRARIES}
     ${PCL_LIBRARIES}
 )

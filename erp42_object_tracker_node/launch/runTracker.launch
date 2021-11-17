@@ -9,9 +9,8 @@
     </node>
 
     <!-- Launch tracking_node -->
-    <node pkg="erp42_object_tracker_node" type="erp42_object_tracker_node_tracking" name="tracking_node">
-        <rosparam command="load" file="$(find erp42_object_tracker_node)/config/tracker_public.yaml"/>
-        <rosparam command="load" file="$(find erp42_object_tracker_node)/config/tracker_private.yaml"/>
+    <node pkg="erp42_object_tracker_node" type="erp42_object_tracker_node_costmap" name="costmap_node" output="screen">
+        <rosparam command="load" file="$(find erp42_object_tracker_node)/config/costmap_public.yaml"/>
     </node>
 
     <!-- Launch rviz for visualization -->

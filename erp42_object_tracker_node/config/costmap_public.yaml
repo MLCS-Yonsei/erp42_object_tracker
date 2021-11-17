@@ -1,0 +1,8 @@
+costmapconverter: {
+  local_frame_id: "velodyne",
+  global_frame_id: "map",
+
+  # segmented point clouds directly from segment node
+  sub_pcs_segmented_topic: "/segment/clouds_array_segmented",
+  sub_pcs_queue_size: 1,
+}

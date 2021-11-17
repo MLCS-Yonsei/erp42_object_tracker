@@ -10,9 +10,3 @@
 [submodule "segmenters_lib"]
 	path = segmenters_lib
 	url = https://github.com/sjnah/segmenters_lib.git
-[submodule "feature_extractors_lib"]
-	path = feature_extractors_lib
-	url = https://github.com/LidarPerception/feature_extractors_lib.git
-[submodule "tracking_lib"]
-	path = tracking_lib
-	url = https://github.com/sjnah/tracking_lib.git
