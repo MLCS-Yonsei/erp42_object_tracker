@@ -10,9 +10,6 @@
 [submodule "lib/segmenters_lib"]
 	path = lib/segmenters_lib
 	url = https://github.com/sjnah/segmenters_lib.git
-[submodule "lib/costmap_converter"]
-	path = lib/costmap_converter
-	url = https://github.com/rst-tu-dortmund/costmap_converter
 [submodule "lib/tracker_gp_lib"]
 	path = lib/tracker_gp_lib
 	url = https://github.com/sjnah/tracker_gp_lib.git

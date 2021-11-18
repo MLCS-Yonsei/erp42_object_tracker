@@ -3,14 +3,20 @@ costmapconverter: {
   global_frame_id: "map",
 
   # segmented point clouds directly from segment node
-  sub_pcs_segmented_topic: "/segment/clouds_array_segmented",
   sub_pcs_queue_size: 1,
+  sub_pcs_segmented_topic: "/segment/clouds_array_segmented",
+  sub_pcs_odom_topic: "/map2gps_pose",
   pub_segments_coarse_topic: "/segment/object_polygon", 
 
   multiple_object_tracking_lidar: {
+    frame_id: "velodyne",
     frequency: 10,
     id_threshold: 2.0, # need to fix
     data_length: 20,
+
+    logSigma2_odom: -5.0,
+    logMagnSigma2_odom: 2.5,
+    logLengthScale_odom: 0.75,
 
     lpf_tau: 0.03,
     logSigma2_x: -5.5,

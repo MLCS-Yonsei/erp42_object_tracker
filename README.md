@@ -5,6 +5,8 @@ AI_racing competition (erp42) LiDAR tracking library, for tracking objects obtai
 
 ### Installation
 ```bash
+$ sudo apt install ros-melodic-costmap-converter
+
 $ cd catkin_ws/src
 $ git clone -b teb https://github.com/sjnah/erp42_object_tracker.git
 $ cd erp42_object_tracker

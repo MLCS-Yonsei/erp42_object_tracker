@@ -4,7 +4,6 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /PointCloud21
         - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 697
@@ -127,7 +126,7 @@ Visualization Manager:
           Value: true
         velodyne:
           Value: true
-      Marker Scale: 1
+      Marker Scale: 5
       Name: TF
       Show Arrows: true
       Show Axes: true
@@ -186,11 +185,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 33.640625
+      Scale: 28.6019344329834
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz)
-      X: 4.4959516525268555
-      Y: 0.4748501181602478
+      X: 1.5167769193649292
+      Y: -0.7060061693191528
     Saved: ~
 Window Geometry:
   Displays:

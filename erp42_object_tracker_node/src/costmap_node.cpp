@@ -43,14 +43,22 @@ bool ObjectCostmap::updateParams()
     private_nh.getParam(param_ns_prefix_ + "/local_frame_id", local_frame_id_);
     private_nh.getParam(param_ns_prefix_ + "/global_frame_id", global_frame_id_);
 
-    std::string sub_pcs_segmented_topic, pub_segments_coarse_topic;
     int sub_pcs_queue_size;
-    private_nh.getParam(param_ns_prefix_ + "/sub_pcs_segmented_topic", sub_pcs_segmented_topic);
+    std::string sub_pcs_segmented_topic, sub_pcs_odom_topic, pub_segments_coarse_topic;
     private_nh.getParam(param_ns_prefix_ + "/sub_pcs_queue_size", sub_pcs_queue_size);
+    private_nh.getParam(param_ns_prefix_ + "/sub_pcs_segmented_topic", sub_pcs_segmented_topic);
+    private_nh.getParam(param_ns_prefix_ + "/sub_pcs_odom_topic", sub_pcs_odom_topic);
     private_nh.getParam(param_ns_prefix_ + "/pub_segments_coarse_topic", pub_segments_coarse_topic);
+
+    tracker_.initialize(private_nh);
+    // Create a ROS Publishers 
+    obstacle_pub_ = private_nh.advertise<costmap_converter::ObstacleArrayMsg> ("move_base/TebLocalPlannerROS/obstacles", 10); // the state of objects (pos and vel)
+    marker_pub_ = private_nh.advertise<visualization_msgs::MarkerArray>("tracker_viz", 10); // rviz visualization
+    pose_pub_ = private_nh.advertise<sensor_msgs::PointCloud>("pose_marker", 10);
 
     // Init subscribers and publishers
     pcs_segmented_sub_ = nh.subscribe<autosense_msgs::PointCloud2Array>(sub_pcs_segmented_topic, sub_pcs_queue_size, &ObjectCostmap::pointcloudCallback, this);
+    pcs_odom_sub_ = nh.subscribe<nav_msgs::Odometry>(sub_pcs_odom_topic, sub_pcs_queue_size, &ObjectCostmap::odomCallback, this);
 
     segments_coarse_pub_ = private_nh.advertise<visualization_msgs::MarkerArray>(pub_segments_coarse_topic, 1);
 
@@ -63,6 +71,12 @@ bool ObjectCostmap::updateParams()
     }
 
     return true;
+}
+
+void ObjectCostmap::odomCallback(const nav_msgs::Odometry odom_msg)
+{
+    // tracker_.odomCallback(odom_msg);
+    ;
 }
 
 void ObjectCostmap::pointcloudCallback(const autosense_msgs::PointCloud2ArrayConstPtr &segments_msg)
@@ -80,6 +94,8 @@ void ObjectCostmap::pointcloudCallback(const autosense_msgs::PointCloud2ArrayCon
         pcl::fromROSMsg(segments_msg->clouds[i], *cloud);
         segment_clouds.push_back(cloud);
     }
+
+    // tracker_.track(segments_msg);
 
     // object builder
     autosense::common::Clock clock_builder;
