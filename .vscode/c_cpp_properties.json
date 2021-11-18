@@ -1,0 +1,23 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/sjnah/ros_ws/AI_racing_object_detection_ws/devel/include/**",
+        "/home/sjnah/ros_ws/cartographer_ws/install_isolated/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/sjnah/ros_ws/AI_racing_object_detection_ws/src/erp42_object_tracker/common_lib/include/**",
+        "/home/sjnah/ros_ws/AI_racing_object_detection_ws/src/erp42_object_tracker/erp42_object_tracker_node/include/**",
+        "/home/sjnah/ros_ws/AI_racing_object_detection_ws/src/erp42_object_tracker/object_builders_lib/include/**",
+        "/home/sjnah/ros_ws/AI_racing_object_detection_ws/src/erp42_object_tracker/roi_filters/include/**",
+        "/home/sjnah/ros_ws/AI_racing_object_detection_ws/src/erp42_object_tracker/segmenters_lib/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}

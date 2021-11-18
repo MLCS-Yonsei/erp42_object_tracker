@@ -5,4 +5,20 @@ costmapconverter: {
   # segmented point clouds directly from segment node
   sub_pcs_segmented_topic: "/segment/clouds_array_segmented",
   sub_pcs_queue_size: 1,
+  pub_segments_coarse_topic: "/segment/object_polygon", 
+
+  multiple_object_tracking_lidar: {
+    frequency: 10,
+    id_threshold: 2.0, # need to fix
+    data_length: 20,
+
+    lpf_tau: 0.03,
+    logSigma2_x: -5.5,
+    logMagnSigma2_x: -3.5,
+    logLengthScale_x: 0.75,
+
+    logSigma2_y: -5.5,
+    logMagnSigma2_y: -3.5,
+    logLengthScale_y: 0.75,
+  },
 }

@@ -1,0 +1,24 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/sjnah/ros_ws/AI_tracker_ws/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/sjnah/ros_ws/AI_tracker_ws/src/common/include/**",
+        "/home/sjnah/ros_ws/AI_tracker_ws/src/erp42_object_tracker/include/**",
+        "/home/sjnah/ros_ws/AI_tracker_ws/src/perception/libs/feature_extractors/include/**",
+        "/home/sjnah/ros_ws/AI_tracker_ws/src/perception/libs/object_builders/include/**",
+        "/home/sjnah/ros_ws/AI_tracker_ws/src/perception/libs/roi_filters/include/**",
+        "/home/sjnah/ros_ws/AI_tracker_ws/src/perception/libs/segmenters/include/**",
+        "/home/sjnah/ros_ws/AI_tracker_ws/src/perception/libs/tracking/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}

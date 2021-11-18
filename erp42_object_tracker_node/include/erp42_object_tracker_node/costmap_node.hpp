@@ -7,8 +7,6 @@
 #include <memory>
 
 #include "common/msgs/autosense_msgs/PointCloud2Array.h"
-#include "common/msgs/autosense_msgs/TrackingFixedTrajectoryArray.h"
-#include "common/msgs/autosense_msgs/TrackingObjectArray.h"
 
 #include "common/bounding_box.hpp"
 #include "common/color.hpp"
@@ -39,8 +37,13 @@ private:
     // Node handle
     ros::NodeHandle private_nh = ros::NodeHandle("~");
     ros::AsyncSpinner spiner = ros::AsyncSpinner(1);
+    // RSO Publisher
+    ros::Publisher segments_coarse_pub_;
     // ROS Subscriber
     ros::Subscriber pcs_segmented_sub_;
+
+    // core
+    std::unique_ptr<autosense::object_builder::BaseObjectBuilder> object_builder_ = nullptr;
 
     // params
     const std::string param_ns_prefix_ = "costmapconverter";  // NOLINT
@@ -51,3 +54,4 @@ private:
 };
 
 #endif // ERP42_OBJ_COSTMAP_
+

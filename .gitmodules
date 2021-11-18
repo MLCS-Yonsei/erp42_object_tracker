@@ -1,12 +1,18 @@
 [submodule "common_lib"]
-	path = common_lib
+	path = lib/common_lib
 	url = https://github.com/sjnah/common_lib.git
 [submodule "roi_filters"]
-	path = roi_filters
+	path = lib/roi_filters
 	url = https://github.com/sjnah/roi_filters_lib.git
 [submodule "object_builders_lib"]
-	path = object_builders_lib
+	path = lib/object_builders_lib
 	url = https://github.com/LidarPerception/object_builders_lib.git
 [submodule "segmenters_lib"]
-	path = segmenters_lib
+	path = lib/segmenters_lib
 	url = https://github.com/sjnah/segmenters_lib.git
+[submodule "costmap_converter"]
+	path = lib/costmap_converter
+	url = https://github.com/rst-tu-dortmund/costmap_converter
+[submodule "lib/tracker_gp_lib"]
+	path = lib/tracker_gp_lib
+	url = https://github.com/sjnah/tracker_gp_lib.git

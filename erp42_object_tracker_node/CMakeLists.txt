@@ -30,6 +30,8 @@ find_package(catkin REQUIRED COMPONENTS
     segmenters_lib
     # needed for detection_node
     roi_filters_lib
+    # needed for tracking_node (or costmap_node)
+    tracker_gp_lib
 )
 
 
