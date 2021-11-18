@@ -25,6 +25,7 @@
   <build_depend>roi_filters_lib</build_depend>
   <build_depend>tracker_gp_lib</build_depend>
   <depend>object_builders_lib</depend>
+  <depend>segmenters_lib</depend>
 
   <build_export_depend>pcl_ros</build_export_depend>
   <build_export_depend>roscpp</build_export_depend>
