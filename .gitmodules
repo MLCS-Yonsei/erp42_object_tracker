@@ -1,6 +1,0 @@
-[submodule "lib/tracker_gp_lib"]
-	path = lib/tracker_gp_lib
-	url = https://github.com/sjnah/tracker_gp_lib.git
-[submodule "lib/common_lib"]
-	path = lib/common_lib
-	url = https://github.com/sjnah/common_lib.git
