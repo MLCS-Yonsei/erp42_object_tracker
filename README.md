@@ -10,8 +10,6 @@ $ git clone https://github.com/sjnah/erp42_object_tracker.git
 $ git submodule update --init --recurisve
 $ git submodule foreach git pull origin master
 $ cd ..
-$ catkin_make -DCMAKE_BUILD_TYPE=Release --only-pkg-with-deps costmap_converter
-$ catkin_make -DCMAKE_BUILD_TYPE=Release --only-pkg-with-deps segmenters_lib
 $ catkin_make -DCMAKE_BUILD_TYPE=Release --only-pkg-with-deps erp42_object_tracker_node
 ```
 
